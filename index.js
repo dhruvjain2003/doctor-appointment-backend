@@ -8,6 +8,8 @@ const passport = require("./src/config/passport");
 const authRoutes = require("./src/routes/authRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
 const doctorRoutes = require("./src/routes/doctorRoutes");
+// const slotRoutes = require("./src/routes/slotRoutes");
+const adminRoutes = require("./src/routes/adminRoutes");
 
 
 const app = express();
@@ -20,6 +22,8 @@ app.use(bodyParser.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/doctors", doctorRoutes);
+// app.use("/api/slots",slotRoutes);
+app.use("/api", adminRoutes);
 
 async function createAdminUser() {
   try {
@@ -29,7 +33,7 @@ async function createAdminUser() {
       const hashedPassword = await bcrypt.hash("admin123", 10);
       await pool.query(
         "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)",
-        ["Admin", "admin@example.com", hashedPassword, "admin"]
+        ["Admin", "admin@gmail.com", hashedPassword, "admin"]
       );
       console.log("✅ Default admin user created successfully.");
     } else {
