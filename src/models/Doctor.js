@@ -3,7 +3,7 @@ const pool = require("../config/db");
 class Doctor {
   static async getAllDoctors() {
     const result = await pool.query(
-      "SELECT * FROM doctors ORDER BY rating DESC"
+      "SELECT * FROM doctors ORDER BY rating DESC, experience DESC"
     );
     return result.rows;
   }
