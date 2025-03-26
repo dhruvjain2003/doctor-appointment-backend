@@ -15,14 +15,15 @@ const getDoctorById = async (req, res) => {
     const doctor = await Doctor.getDoctorById(id);
 
     if (!doctor) {
-      return res.status(404).json({ message: "Doctor not found" });
+      return res.status(404).json({ success: false, message: "Doctor not found" });
     }
 
-    res.status(200).json(doctor);
+    res.status(200).json({ success: true, data: doctor }); 
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
+
 
 const searchDoctors = async(req,res) => {
   // console.log("hello");

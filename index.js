@@ -8,9 +8,9 @@ const passport = require("./src/config/passport");
 const authRoutes = require("./src/routes/authRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
 const doctorRoutes = require("./src/routes/doctorRoutes");
-// const slotRoutes = require("./src/routes/slotRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
-
+const appointmentRoutes = require("./src/routes/appointmentRoutes");
+const slotRoutes = require("./src/routes/slotRoutes");
 
 const app = express();
 
@@ -19,10 +19,11 @@ app.use(cors());
 app.use(passport.initialize());
 app.use(bodyParser.json());
 
+app.use('/api/slots', slotRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/doctors", doctorRoutes);
-// app.use("/api/slots",slotRoutes);
+app.use("/api/appointments", appointmentRoutes);
 app.use("/api", adminRoutes);
 
 async function createAdminUser() {
