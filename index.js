@@ -11,6 +11,7 @@ const doctorRoutes = require("./src/routes/doctorRoutes");
 const adminRoutes = require("./src/routes/adminRoutes");
 const appointmentRoutes = require("./src/routes/appointmentRoutes");
 const slotRoutes = require("./src/routes/slotRoutes");
+const reviewRoutes = require("./src/routes/reviewRoutes");
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api", adminRoutes);
-
+app.use("/api/reviews", reviewRoutes);
 async function createAdminUser() {
   try {
     const result = await pool.query("SELECT * FROM users WHERE role = $1", ["admin"]);
