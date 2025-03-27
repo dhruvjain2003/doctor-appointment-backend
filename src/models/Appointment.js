@@ -98,6 +98,25 @@ class Appointment {
         const result = await pool.query(query, [status, appointmentId]);
         return result.rows[0];
     }
+
+    static async getAppointmentDetails(appointmentId) {
+        const query = `
+            SELECT 
+                a.*,
+                u.name as patient_name,
+                u.email as patient_email,
+                d.name as doctor_name,
+                s.slot_time,
+                s.slot_type
+            FROM appointments a
+            JOIN users u ON a.user_id = u.id
+            JOIN doctors d ON a.doctor_id = d.id
+            JOIN slots s ON a.slot_id = s.id
+            WHERE a.id = $1`;
+        
+        const result = await pool.query(query, [appointmentId]);
+        return result.rows[0];
+    }
 }
 
 module.exports = Appointment;
