@@ -81,7 +81,7 @@ const forgotPassword = async (req, res) => {
         pass: process.env.PASSWORD,
       },
     });
-    const resetUrl = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
     const mailOptions = {
       from: process.env.EMAIL,
       to: email,

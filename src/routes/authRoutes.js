@@ -18,10 +18,10 @@ router.get(
     (req, res) => {
       if (!req.user || !req.user.token) {
         return res.redirect(
-          `http://localhost:3000//login?error=Authentication Failed`
+          `${process.env.FRONTEND_URL}/login?error=Authentication Failed`
         );
       }
-      res.redirect(`http://localhost:3000//login?token=${req.user.token}`);
+      res.redirect(`${process.env.FRONTEND_URL}//login?token=${req.user.token}`);
     }
 );
 
