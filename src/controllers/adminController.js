@@ -1,9 +1,5 @@
 require("dotenv").config();
-const { Pool } = require("pg");
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const pool = require("../config/db");
 
 const createDoctor = async (doctor) => {
   const { name, specialty, experience, rating, gender, profile_image_url } = doctor;
