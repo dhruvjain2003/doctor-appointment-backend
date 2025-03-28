@@ -65,7 +65,6 @@ class User {
             paramCount++;
         }
 
-        // If no fields to update, return current user data
         if (updateFields.length === 0) {
             return await this.getUserById(userId);
         }

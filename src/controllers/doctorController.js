@@ -60,4 +60,24 @@ const filterDoctors = async (req, res) => {
   }
 };
 
-module.exports = { getAllDoctors, getDoctorById, searchDoctors, filterDoctors };
+const deleteDoctor = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedDoctor = await Doctor.deleteDoctor(id);
+    
+    if (!deletedDoctor) {
+      return res.status(404).json({ success: false, message: "Doctor not found" });
+    }
+
+    res.status(200).json({ 
+      success: true, 
+      message: "Doctor deleted successfully",
+      data: deletedDoctor 
+    });
+  } catch (error) {
+    console.error("Error in deleteDoctor:", error);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
+module.exports = { getAllDoctors, getDoctorById, searchDoctors, filterDoctors, deleteDoctor };

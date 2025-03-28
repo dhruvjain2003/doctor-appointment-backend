@@ -37,17 +37,17 @@ async function createAdminUser() {
         "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)",
         ["Admin", "admin@gmail.com", hashedPassword, "admin"]
       );
-      console.log("✅ Default admin user created successfully.");
+      console.log("Default admin user created successfully.");
     } else {
-      console.log("✅ Admin user already exists.");
+      console.log("Admin user already exists.");
     }
   } catch (error) {
-    console.error("❌ Error creating admin user:", error);
+    console.error("Error creating admin user:", error);
   }
 }
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
   await createAdminUser();
 });

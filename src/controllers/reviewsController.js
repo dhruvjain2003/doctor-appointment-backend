@@ -86,7 +86,7 @@ const getAllReviews = async (req, res) => {
        ORDER BY r.created_at DESC`
     );
 
-    console.log("Fetched reviews:", reviews.rows); // Add this for debugging
+    console.log("Fetched reviews:", reviews.rows); 
 
     res.status(200).json({
       success: true,

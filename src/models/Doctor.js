@@ -57,6 +57,11 @@ class Doctor {
     const result = await pool.query(query, values);
     return result.rows;
   }
+
+  static async deleteDoctor(id) {
+    const result = await pool.query("DELETE FROM doctors WHERE id = $1 RETURNING *", [id]);
+    return result.rows[0];
+  }
 }
 
 module.exports = Doctor;
