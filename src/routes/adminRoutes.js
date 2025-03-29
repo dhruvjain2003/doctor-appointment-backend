@@ -6,14 +6,24 @@ const router = express.Router();
 
 router.post("/admin/add-doctor", upload.single("profile_image"), async (req, res) => {
   try {
-    const { name, specialty, experience, rating, gender } = req.body;
+    const { name, specialty, experience, rating, gender, degree, consultation_fee, contact_number } = req.body;
     const profile_image_url = req.file ? req.file.path : null;
 
     if (!name || !specialty || !experience || !rating || !gender || !profile_image_url) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    const doctor = await createDoctor({ name, specialty, experience, rating, gender, profile_image_url });
+    const doctor = await createDoctor({
+      name,
+      specialty,
+      experience,
+      rating,
+      gender,
+      profile_image_url,
+      degree: degree || null, 
+      consultation_fee: consultation_fee || null, 
+      contact_number: contact_number || null
+    });
 
     res.status(201).json({ message: "Doctor added successfully", doctor });
   } catch (error) {
@@ -21,6 +31,7 @@ router.post("/admin/add-doctor", upload.single("profile_image"), async (req, res
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 router.get("/admin/stats", getDashboardStats);
 

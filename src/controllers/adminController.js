@@ -2,45 +2,70 @@ require("dotenv").config();
 const pool = require("../config/db");
 
 const createDoctor = async (doctor) => {
-  const { name, specialty, experience, rating, gender, profile_image_url } = doctor;
+  const { 
+    name, 
+    specialty, 
+    experience, 
+    rating, 
+    gender, 
+    profile_image_url, 
+    degree, 
+    consultation_fee, 
+    contact_number 
+  } = doctor;
+
   console.log("Received doctor data:", doctor);
+
   const client = await pool.connect();
   
   try {
     await client.query('BEGIN');
-    const doctorQuery = `
-      INSERT INTO doctors (name, specialty, experience, rating, gender, profile_image) 
-      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`;
 
-    const doctorValues = [name, specialty, experience, rating, gender, profile_image_url];
+    const doctorQuery = `
+      INSERT INTO doctors (name, specialty, experience, rating, gender, profile_image, degree, consultation_fee, contact_number) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`;
+
+    const doctorValues = [
+      name, 
+      specialty, 
+      experience, 
+      rating, 
+      gender, 
+      profile_image_url, 
+      degree, 
+      consultation_fee, 
+      contact_number ? contact_number : null 
+    ];
+
     const doctorResult = await client.query(doctorQuery, doctorValues);
     const newDoctor = doctorResult.rows[0];
+
     const slots = [
-      { time: '09:00:00', type: 'morning' },
-      { time: '09:30:00', type: 'morning' },
-      { time: '10:00:00', type: 'morning' },
-      { time: '10:30:00', type: 'morning' },
-      { time: '11:00:00', type: 'morning' },
-      { time: '11:30:00', type: 'morning' },
-      { time: '12:00:00', type: 'morning' },
-      { time: '12:30:00', type: 'morning' },
-      { time: '16:30:00', type: 'evening' },
-      { time: '17:00:00', type: 'evening' },
-      { time: '17:30:00', type: 'evening' },
-      { time: '18:00:00', type: 'evening' },
-      { time: '18:30:00', type: 'evening' },
-      { time: '19:00:00', type: 'evening' },
-      { time: '19:30:00', type: 'evening' },
-      { time: '20:00:00', type: 'evening' }
+      ['09:00:00', 'morning'],
+      ['09:30:00', 'morning'],
+      ['10:00:00', 'morning'],
+      ['10:30:00', 'morning'],
+      ['11:00:00', 'morning'],
+      ['11:30:00', 'morning'],
+      ['12:00:00', 'morning'],
+      ['12:30:00', 'morning'],
+      ['16:30:00', 'evening'],
+      ['17:00:00', 'evening'],
+      ['17:30:00', 'evening'],
+      ['18:00:00', 'evening'],
+      ['18:30:00', 'evening'],
+      ['19:00:00', 'evening'],
+      ['19:30:00', 'evening'],
+      ['20:00:00', 'evening']
     ];
 
     const slotQuery = `
-      INSERT INTO slots (doctor_id, slot_time, slot_type)
-      VALUES ($1, $2, $3)`;
+      INSERT INTO slots (doctor_id, slot_time, slot_type) 
+      VALUES ${slots.map((_, i) => `($1, $${i * 2 + 2}, $${i * 2 + 3})`).join(", ")}
+    `;
 
-    for (const slot of slots) {
-      await client.query(slotQuery, [newDoctor.id, slot.time, slot.type]);
-    }
+    const slotValues = [newDoctor.id, ...slots.flat()];
+    await client.query(slotQuery, slotValues);
 
     await client.query('COMMIT');
     console.log("Inserted doctor and slots successfully");
