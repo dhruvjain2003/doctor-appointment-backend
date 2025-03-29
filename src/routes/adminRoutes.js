@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../middleware/upload"); 
-const { createDoctor } = require("../controllers/adminController"); 
+const { createDoctor,getDashboardStats } = require("../controllers/adminController"); 
 
 const router = express.Router();
 
@@ -21,5 +21,7 @@ router.post("/admin/add-doctor", upload.single("profile_image"), async (req, res
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+router.get("/admin/stats", getDashboardStats);
 
 module.exports = router;

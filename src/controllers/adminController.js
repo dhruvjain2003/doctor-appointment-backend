@@ -55,4 +55,18 @@ const createDoctor = async (doctor) => {
   }
 };
 
-module.exports = { createDoctor };
+const getDashboardStats = async (req, res) => {
+  try {
+      const totalDoctors = await pool.query("SELECT COUNT(*) FROM doctors");
+      const totalUsers = await pool.query("SELECT COUNT(*) FROM users");
+      res.json({
+          totalDoctors: totalDoctors.rows[0].count,
+          totalUsers: totalUsers.rows[0].count
+      });
+  } catch (error) {
+      console.error("Error fetching dashboard stats:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports = { createDoctor,getDashboardStats };
